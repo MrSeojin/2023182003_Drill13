@@ -213,8 +213,8 @@ class Boy:
         self.x += math.cos(self.dir) * self.speed * game_framework.frame_time
         self.y += math.sin(self.dir) * self.speed * game_framework.frame_time
 
-        self.x = clamp(50.0, self.x, server.background.w - 50.0)
-        self.y = clamp(50.0, self.y, server.background.h - 50.0)
+        self.x = clamp(get_canvas_width()/2, self.x, server.background.w - get_canvas_width()/2)
+        self.y = clamp(get_canvas_height()/2, self.y, server.background.h - get_canvas_height()/2)
 
     def handle_event(self, event):
         self.state_machine.handle_event(('INPUT', event))
