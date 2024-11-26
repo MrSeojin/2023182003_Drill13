@@ -204,7 +204,7 @@ class Boy:
         )
 
         self.x, self.y = server.background.w / 2, server.background.h / 2
-
+        self.ball_num = 0
 
 
     def update(self):
@@ -213,27 +213,30 @@ class Boy:
         self.x += math.cos(self.dir) * self.speed * game_framework.frame_time
         self.y += math.sin(self.dir) * self.speed * game_framework.frame_time
 
-        #self.x = clamp(50.0, self.x, server.background.w - 50.0)
-        #self.y = clamp(50.0, self.y, server.background.h - 50.0)
+        self.x = clamp(50.0, self.x, server.background.w - 50.0)
+        self.y = clamp(50.0, self.y, server.background.h - 50.0)
 
     def handle_event(self, event):
         self.state_machine.handle_event(('INPUT', event))
 
     def draw(self):
-        #sx, sy = self.x - server.background.window_left, self.y - server.background.window_bottom
-        #self.image.clip_draw(int(self.frame) * 100, self.action * 100, 100, 100, sx, sy)
-
-        sx, sy = get_canvas_width() // 2, get_canvas_height() // 2
+        sx, sy = self.x - server.background.window_left, self.y - server.background.window_bottom
         self.image.clip_draw(int(self.frame) * 100, self.action * 100, 100, 100, sx, sy)
 
-        self.font.draw(int(sx - 100), int(sy + 60), f'({self.x:5.5}, {self.y:5.5})', (255, 255, 0))
+        #sx, sy = get_canvas_width() // 2, get_canvas_height() // 2
+        #self.image.clip_draw(int(self.frame) * 100, self.action * 100, 100, 100, sx, sy)
 
+        self.font.draw(int(sx - 10), int(sy + 80), f'{self.ball_num}', (0, 0, 255))
+        self.font.draw(int(sx - 100), int(sy + 60), f'({self.x:5.5}, {self.y:5.5})', (255, 255, 0))
+        draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-        return self.x - 20, self.y - 50, self.x + 20, self.y + 50
+        sx, sy = self.x - server.background.window_left, self.y - server.background.window_bottom
+        return sx - 20, sy - 50, sx + 20, sy + 50
 
     def handle_collision(self, group, other):
-        pass
+        if group == 'boy:ball':
+            self.ball_num +=1
 
 
 
